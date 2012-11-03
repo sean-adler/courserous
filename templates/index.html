@@ -31,22 +31,25 @@
 			  <option value="R">Thursday</option>
 			  <option value="F">Friday</option>
 			</select>
-			<span> Department: </span>
-			<select id="dropdown2">
-			  <option value="choose">Choose one</option>
-			  <option value="CS">Computer Science</option>
-			  <option value="Math">Math</option>
-			  <option value="Dance">Dance</option>
-			  <option value="Economics">Economics</option>
-			</select>
 			<!--
-			<select class="dropdown">
+			<select id="time">
 			  <option value="volvo">Volvo</option>
 			  <option value="saab">Saab</option>
 			  <option value="opel">Opel</option>
 			  <option value="audi">Audi</option>
 			</select>
-		-->
+			-->
+			<span> Department: </span>
+			<select id="dropdown2">
+			  <option value="choose">Choose one</option>
+			  <option value="CS">Computer Science</option>
+			  <option value="Biology">Biology</option>
+			  <option value="Chemistry">Chemistry</option>
+			  <option value="Economics">Economics</option>
+			  <option value="Engineering">Engineering</option>
+			  <option value="Dance">Dance</option>
+			  <option value="Math">Math</option>
+			</select>
 		</div>
 	</div>
 
@@ -56,10 +59,10 @@
 			{% for course in masterList %}
 				<div class="showBlock item {{course.days}} {{course.dept}}">
 				<span id="bold"> {{course.course[0]}} </span>
-				</br> {{course.startTime }}
+				</br> </br> {{course.startTime }}
 				</br> {{ course.endTime }}
 				</br> {{ course.days }}
-				</br><i> {{ course.prof }} </i>
+				</br><p align="right"><i> {{ course.prof }} </i></p>
 			</div>
 			{% endfor %}
 
@@ -74,7 +77,6 @@ $(function(){
     isFitWidth: true,
     columnWidth : 240
   });
- // $('#dropdown2').change(function());
 });
 
 var all = $('.item');
@@ -120,14 +122,14 @@ $('#dropdown1').change(function() {
 			$.merge(hidden, hidden2);
 		}
 
-		//clear all hiding and showing
+		// clear all hiding and showing
 		all.removeClass("hideBlock");
 		all.removeClass("showBlock");
 
-		//set class to hidden to for everything that should be hidden
+		// set class to hidden to for everything that should be hidden
 		hidden.addClass("hideBlock");
 
-		//set class to show for everything that is in all, and is not hidden
+		// set class to show for everything that is in all, and is not hidden
 		all.not(".hideBlock").addClass("showBlock");
 
 	// var cat = $('#dropdown1').find('option:selected').attr('value');

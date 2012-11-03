@@ -5,26 +5,27 @@ from bs4 import BeautifulSoup
 import urllib2
 from flask import Flask, render_template, url_for
 import os
+from datetime import strptime
 
 app = Flask(__name__)
 
 ## Create our kick-ass data structure
 
-soup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=CSCI&yr=2013&sess=SP'))
+csSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=CSCI&yr=2013&sess=SP'))
 
 ### Construct the list of classes
-trs = soup.findAll('tr')
+csTrs = csSoup.findAll('tr')
 
-masterList = []
-for i in range(35, len(trs) - 1):  ## courses start at 5th element of trs
-    tags = [tag.text for tag in trs[i].findAll()]
+csList = []
+for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
+    tags = [tag.text for tag in csTrs[i].findAll()]
     if len(tags) > 14:
         course = str(tags[-2]).strip()
         days = str(tags[-5])
         days = days.replace('-', '')
         days = days.strip()
         days = ' '.join(days)
-        masterList.append( {
+        csList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
             'days': days,
             'startTime': str(tags[-4]),
@@ -33,11 +34,16 @@ for i in range(35, len(trs) - 1):  ## courses start at 5th element of trs
             'dept': 'CS'
         } )
         
-        if 'A R R' in masterList[-1].values():
+        if 'A R R' in csList[-1].values():
             ## fix 'ARR' fields
-            masterList[-1]['days'] = 'TBA'
-            masterList[-1]['startTime'] = ''
-            masterList[-1]['endTime'] = ''
+            csList[-1]['days'] = 'TBA'
+            csList[-1]['startTime'] = ''
+            csList[-1]['endTime'] = ''
+
+        ## add general time flag
+            
+
+        
 
 
 mathSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=MATH&yr=2013&sess=SP'))
@@ -120,10 +126,87 @@ for i in range(20, len(econTrs) - 1):
             econList[-1]['startTime'] = ''
             econList[-1]['endTime'] = ''
 
+bioSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=BIOL&yr=2013&sess=SP'))
+bioTrs = bioSoup.findAll('tr')
+bioList = []
+for i in range(96, len(bioTrs) - 1):
+    tags = [tag.text for tag in bioTrs[i].findAll()]
+    if len(tags) > 16:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        bioList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Biology'
+        } )
+        
+        if 'A R R' in econList[-1].values():
+            ## fix 'ARR' fields
+            bioList[-1]['days'] = 'TBA'
+            bioList[-1]['startTime'] = ''
+            bioList[-1]['endTime'] = ''
 
-## Concatenate lists together?? ##
+chemSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=CHEM&yr=2013&sess=SP'))
+chemTrs = chemSoup.findAll('tr')
+chemList = []
+for i in range(55, len(chemTrs) - 1):
+    tags = [tag.text for tag in chemTrs[i].findAll()]
+    if len(tags) > 16:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        chemList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Chemistry'
+        } )
+        
+        if 'A R R' in chemList[-1].values():
+            ## fix 'ARR' fields
+            chemList[-1]['days'] = 'TBA'
+            chemList[-1]['startTime'] = ''
+            chemList[-1]['endTime'] = ''
 
-masterList += mathList + danceList + econList
+engSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=ENGR&yr=2013&sess=SP'))
+engTrs = engSoup.findAll('tr')
+engList = []
+for i in range(63, len(engTrs) - 1):
+    tags = [tag.text for tag in engTrs[i].findAll()]
+    if len(tags) > 16:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        engList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Engineering'
+        } )
+        
+        if 'A R R' in engList[-1].values():
+            ## fix 'ARR' fields
+            engList[-1]['days'] = 'TBA'
+            engList[-1]['startTime'] = ''
+            engList[-1]['endTime'] = ''
+
+## Concatenate lists together ##
+
+masterList = csList + bioList + chemList + mathList + danceList + econList + engList
 
 
 @app.route('/')
@@ -132,8 +215,7 @@ def show_all():
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(port=3000)
 
 """
 
