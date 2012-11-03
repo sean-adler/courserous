@@ -3,16 +3,168 @@
 <head>
 	<meta charset="UTF-8">
 	<title>CHack</title>
-	<link rel=StyleSheet href="style.css" type="text/css">
+	<link rel=StyleSheet href="styles.css" type="text/css">
+
+	<script src="jquery-1.7.1.min.js" > </script>
+	<script src="jquery.masonry.js" > </script>
+
 
 </head>
 <body>
-	<div id="header">
-		
+
+	<div id="welcome">
+		<h1> Welcome to course picker </h1>
+		<h1> Welcome to course picker </h1>
+		<h1> Welcome to course picker </h1>
+		<h1> Welcome to course picker </h1>
+		<h1> Welcome to course picker </h1>
+		<h1> Welcome to course picker </h1>
+		<h1> Welcome to course picker </h1>
+	</div>	
+
+
+	<div id="sticky">
+		<span> motherfucking pinterest for your course schedule </span> 
 	</div>
 
-	<div id="container">
+	
+		<div id="container">
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF THESE ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF THESE ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF THESE ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF THESE ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is paragraph </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF THESE ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF THESE ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LONGER </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+			<div class="item"> 
+				<p> yo motherfucker this is SOME OF CRARYAYRAYR ARE LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL LOL  </p>
+			</div>
+		</div>
 	</div>
+
+<script>
+$(function(){
+  $('#container').masonry({
+    // options
+    itemSelector : '.item',
+    isFitWidth: true,
+    columnWidth : 240
+  });
+});
+
+</script>
+
+<script>
+$(function() {
+ 
+    // grab the initial top offset of the navigation 
+    var sticky_offset_top = $('#sticky').offset().top;
+     
+    // our function that decides weather the navigation bar should have "fixed" css position or not.
+    var sticky = function(){
+        var scroll_top = $(window).scrollTop(); // our current vertical position from the top
+         
+        // if we've scrolled more than the navigation, change its position to fixed to stick to top,
+        // otherwise change it back to relative
+        if (scroll_top > sticky_offset_top) { 
+            $('#sticky').css({ 'position': 'fixed', 'top':0, 'left':0 });
+        } else {
+            $('#sticky').css({ 'position': 'relative' }); 
+        }   
+    };
+     
+    // run our function on load
+    sticky();
+     
+    // and run it again every time you scroll
+    $(window).scroll(function() {
+         sticky();
+    });
+ 
+});
+
+</script>
+
 
 </body>
 </html>
