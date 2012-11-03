@@ -2,6 +2,12 @@ body{
 	margin: 0px;
 }
 
+#welcome{
+	background-color: #0266C8;
+	height: 300px;
+	padding-top: 100px;
+	color: #FFF;
+}
 
 #sticky{
 	position: fixed;
@@ -12,10 +18,13 @@ body{
 	z-index: 10;
 }
 
+#content{
+	background-image: url('az_subtle.png');
+
+}
+
 #container{
 	height: 2000px;
-/*	width: 100%;
-*/	background-color: #efefef;
 	padding-top: 10px;
 	z-index: 9;
 	margin: 0 auto;
@@ -23,13 +32,15 @@ body{
 
 .item{
 	width: 200px;
-	background-color: #BBB;
-	border: 1px solid #777;
+	background-color: #FFFFFF;
+	border: 1px solid #999;
 	border-radius: 2px;
 	float: left;
-	margin-top: 10px;
+	margin-top: 20px;
 	padding: 10px;
 	z-index: 8;
-
+	box-shadow: 0 1px 3px #999;
+	color: #333;
+	font-family: sans-serif;
 
 }
