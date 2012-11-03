@@ -126,16 +126,8 @@ masterList += mathList + danceList + econList
 
 
 @app.route('/')
-def show_cs():
+def show_all():
     return render_template('index.html', masterList=masterList)
-
-@app.route('/math')
-def show_math():
-    return render_template('index.html', masterList=mathList)
-
-@app.route('/dance')
-def show_dance():
-    return render_template('index.html', masterList=danceList)
 
 if __name__ == '__main__':
     app.run(port=3000)
