@@ -1,0 +1,75 @@
+body{
+	margin: 0px;
+}
+
+#welcome{
+	background-color: #333;
+	height: 220px;
+	padding-top: 80px;
+	color: #FFF;
+}
+
+#sticky{
+	position: fixed;
+	width: 100%;
+	height: 60px;
+	background-color: #333;
+	color: #fff;
+	font-family: sans-serif;
+	z-index: 10;
+}
+
+#dropdown-holder{
+	width: 460px;
+	margin: auto;
+	padding-top:20px;
+}
+.dropdown{
+	width: 100px;
+	margin-left: 20px;
+}
+
+#content{
+	background-image: url('../static/az_subtle.png');
+}
+
+#container{
+	height: 2000px;
+	padding-top: 10px;
+	z-index: 9;
+	margin: 0 auto;
+}
+
+#image{
+	margin:auto;
+	width: 800px;
+}
+
+#bold{
+	font-weight: bold;
+}
+
+.item{
+	width: 200px;
+	background-color: #FFFFFF;
+	border: 1px solid #999;
+	border-radius: 2px;
+	float: left;
+	margin-top: 20px;
+	padding: 10px;
+	z-index: 8;
+	box-shadow: 0 1px 3px #999;
+	color: #333;
+	font-family: sans-serif;
+
+}
+
+.item.showBlock {
+	display: block;
+}
+
+.item.hideBlock {
+	
+	display:none;
+}
+
