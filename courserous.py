@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 import urllib2
 from flask import Flask, render_template, url_for
 import os
-from datetime import strptime
 
 app = Flask(__name__)
 
