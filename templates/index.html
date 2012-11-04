@@ -8,7 +8,6 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
 	<script src="/static/jquery.masonry.js" > </script>
 
-
 </head>
 <body>
 
@@ -23,7 +22,7 @@
 	<div id="sticky">
 		<div id="dropdown-holder">
 			<span> Day of the Week: </span>
-			<select id="dropdown1">
+			<select id="dayOfWeek">
 			  <option value="choose">All</option>
 			  <option value="M">Monday</option>
 			  <option value="T">Tuesday</option>
@@ -31,16 +30,14 @@
 			  <option value="R">Thursday</option>
 			  <option value="F">Friday</option>
 			</select>
-			<!--
+			<span> Time Slot: </span>
 			<select id="time">
-			  <option value="volvo">Volvo</option>
-			  <option value="saab">Saab</option>
-			  <option value="opel">Opel</option>
-			  <option value="audi">Audi</option>
+			  <option value="choose">All</option>
+			  <option value="Morning">Morning</option>
+			  <option value="Afternoon">Afternoon</option>
 			</select>
-			-->
 			<span> Department: </span>
-			<select id="dropdown2">
+			<select id="dept">
 			  <option value="choose">All</option>
 			  <option value="CS">Computer Science</option>
 			  <option value="Biology">Biology</option>
@@ -58,7 +55,7 @@
 		<div id="container">
 
 			{% for course in masterList %}
-				<div class="showBlock item {{course.days}} {{course.dept}}">
+				<div class="showBlock item {{course.days}} {{course.dept}} {{ course.timeSlot }}">
 				<span id="bold"> {{course.course[0]}} </span>
 				</br> </br> {{course.startTime }}
 				</br> {{ course.endTime }}
@@ -110,17 +107,23 @@ $(function() {
 });
 
 
-$('#dropdown1').change(function() {
-	var cat1 = $('#dropdown1').find('option:selected').attr('value');
-	if (cat1 != 'choose')
+$('#dayOfWeek').change(function() {
+	var dayOfWeek = $('#dayOfWeek').find('option:selected').attr('value');
+	if (dayOfWeek != 'choose')
 	{
-		var hidden = $('.item').not(document.getElementsByClassName(cat1));
+		var hidden = $('.item').not(document.getElementsByClassName(dayOfWeek));
 
-		var cat2 = $('#dropdown2').find('option:selected').attr('value');
-		if (cat2 != 'choose')
+		var dept = $('#dept').find('option:selected').attr('value');
+		if (dept != 'choose')
 		{
-			var hidden2 = $('.item').not(document.getElementsByClassName(cat2));
-			$.merge(hidden, hidden2);
+			var hiddenDepts = $('.item').not(document.getElementsByClassName(dept));
+			$.merge(hidden, hiddenDepts);
+		}
+
+		var timeSlot = $('#time').find('option:selected').attr('value');
+		if (timeSlot != 'choose') {
+			var hiddenTimes = $('.item').not(document.getElementsByClassName(timeSlot));
+			$.merge(hidden, hiddenTimes);
 		}
 
 		// clear all hiding and showing
@@ -133,19 +136,6 @@ $('#dropdown1').change(function() {
 		// set class to show for everything that is in all, and is not hidden
 		all.not(".hideBlock").addClass("showBlock");
 
-	// var cat = $('#dropdown1').find('option:selected').attr('value');
-	// if (cat != 'choose')
-	// {
-	// 	var hidden = $('.item').not(document.getElementsByClassName(cat));
-	// 	$('#container').masonry( 'remove', $('.item'))
-	// 	var showMe = $.grep(all, function(el)
- //                    {
- //                        return $.inArray(el, hidden) == -1;
- //                    });
-	// 	$('#container').prepend( showMe ).masonry( 'reload' );
-	// } else {
-	// 	$('#container').masonry( 'remove', $('.item'))
-	// 	$('#container').prepend( all ).masonry( 'reload' );
 	} else {
 		all.removeClass("hideBlock");
 		all.addClass('showBlock');
@@ -153,16 +143,23 @@ $('#dropdown1').change(function() {
 	$('#container').masonry( 'reload' );
 });
 
-$('#dropdown2').change(function() {
-	var cat2 = $('#dropdown2').find('option:selected').attr('value');
-	if (cat2 != 'choose')
+$('#dept').change(function() {
+	var dept = $('#dept').find('option:selected').attr('value');
+	if (dept != 'choose')
 	{
-		var cat1 = $('#dropdown1').find('option:selected').attr('value');
-		var hidden = $('.item').not(document.getElementsByClassName(cat2));
-		if (cat1 != 'choose')
+		var hidden = $('.item').not(document.getElementsByClassName(dept));
+
+		var dayOfWeek = $('#dayOfWeek').find('option:selected').attr('value');
+		if (dayOfWeek != 'choose')
 		{
-			var hidden1 = $('.item').not(document.getElementsByClassName(cat1));
-			$.merge(hidden, hidden1);
+			var hiddenDays = $('.item').not(document.getElementsByClassName(dayOfWeek));
+			$.merge(hidden, hiddenDays);
+		}
+
+		var timeSlot = $('#time').find('option:selected').attr('value');
+		if (timeSlot != 'choose') {
+			var hiddenTimes = $('.item').not(document.getElementsByClassName(timeSlot));
+			$.merge(hidden, hiddenTimes);
 		}
 		//clear all hiding and showing
 		all.removeClass("hideBlock");
@@ -188,6 +185,47 @@ $('#dropdown2').change(function() {
 	}
 	$('#container').masonry( 'reload' );
 });
+
+$('#time').change(function() {
+
+	var timeSlot = $('#time').find('option:selected').attr('value');
+	if (timeSlot != 'choose')
+	{
+		var hidden = $('.item').not(document.getElementsByClassName(timeSlot));
+
+		var dayOfWeek = $('#dayOfWeek').find('option:selected').attr('value');
+		if (dayOfWeek != 'choose') {
+			var hiddenDays = $('.item').not(document.getElementsByClassName(dayOfWeek));
+			$.merge(hidden, hiddenDays);
+		}
+
+		var dept = $('#dept').find('option:selected').attr('value');
+		if (dept != 'choose') {
+			var hiddenDepts = $('.item').not(document.getElementsByClassName(dept));
+			$.merge(hidden, hiddenDepts);
+		}
+
+
+		// Clear all hiding and showing
+		all.removeClass("hideBlock");
+		all.removeClass("showBlock");
+
+		// Set class to hidden to for everything that should be hidden
+		hidden.addClass("hideBlock");
+
+		// Set class to show for everything that is in all, and is not hidden
+		all.not(".hideBlock").addClass("showBlock");
+
+	} else {
+		all.removeClass("hideBlock");
+		all.addClass('showBlock');
+//		$('#container').masonry( 'remove', $('.item'))
+//		$('#container').prepend( all ).masonry( 'reload' );
+	}
+	$('#container').masonry( 'reload' );
+
+});
+
 
 </script>
 

@@ -5,8 +5,38 @@ from bs4 import BeautifulSoup
 import urllib2
 from flask import Flask, render_template, url_for
 import os
+from datetime import datetime
 
 app = Flask(__name__)
+
+## Helper functions for timeSlot CSS class
+
+def formatTime(s):
+    """Takes a string like '11:00am' and returns '11:00 AM'"""
+    sL = list(s)
+    sL.insert(-2, ' ')
+    sL = [c.upper() for c in sL]
+    s = ''.join(sL)
+    return s
+
+def timeIsBeforeNoon(timeStr):
+    if ':' not in timeStr:
+        return False
+    else:
+        baseDate = '2012-01-01'
+        pivotTimeStr = '12:00 PM'
+        format = '%Y-%m-%d %I:%M %p'
+        pivotTime = datetime.strptime(baseDate + ' ' + pivotTimeStr, format)
+        time = datetime.strptime(baseDate + ' ' + formatTime(timeStr), format)
+        return time < pivotTime
+
+## More helper code for time comparisons
+## We'll compare every time to the pivot -- is our time before noon, or after noon?
+
+baseDate = '2012-01-01'
+baseTime = '12:00 PM'
+format = '%Y-%m-%d %I:%M %p'
+pivotTime = datetime.strptime(baseDate + ' ' + baseTime, format)
 
 ## Create our kick-ass data structure
 
@@ -30,7 +60,8 @@ for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'CS'
+            'dept': 'CS',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
         } )
         
         if 'A R R' in csList[-1].values():
@@ -61,7 +92,8 @@ for i in range(48, len(mathTrs) - 1):
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'Math'
+            'dept': 'Math',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
         } )
         
         if 'A R R' in mathList[-1].values():
@@ -89,7 +121,9 @@ for i in range(23, len(danceTrs) - 1):
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'Dance'
+            'dept': 'Dance',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
         } )
         
         if 'A R R' in danceList[-1].values():
@@ -115,7 +149,9 @@ for i in range(20, len(econTrs) - 1):
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'Economics'
+            'dept': 'Economics',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
         } )
         
         if 'A R R' in econList[-1].values():
@@ -141,7 +177,9 @@ for i in range(96, len(bioTrs) - 1):
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'Biology'
+            'dept': 'Biology',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
         } )
         
         if 'A R R' in econList[-1].values():
@@ -167,7 +205,9 @@ for i in range(55, len(chemTrs) - 1):
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'Chemistry'
+            'dept': 'Chemistry',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
         } )
         
         if 'A R R' in chemList[-1].values():
@@ -193,7 +233,9 @@ for i in range(63, len(engTrs) - 1):
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
             'prof': str(tags[2]),
-            'dept': 'Engineering'
+            'dept': 'Engineering',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
         } )
         
         if 'A R R' in engList[-1].values():
@@ -213,8 +255,7 @@ def show_all():
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(port=3000)
     
 """
 
