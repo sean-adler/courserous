@@ -41,7 +41,6 @@ for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
             csList[-1]['endTime'] = ''
 
         ## add general time flag
-            
 
         
 
