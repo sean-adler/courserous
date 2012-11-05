@@ -32,43 +32,10 @@ format = '%Y-%m-%d %I:%M %p'
 pivotTime = datetime.strptime(baseDate + ' ' + baseTime, format)
 ## We'll compare every time to the pivot -- is our time before noon, or after noon?
 
-## Create our kick-ass data structure
 
-csSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=CSCI&yr=2013&sess=SP'))
-
-### Construct the list of classes
-csTrs = csSoup.findAll('tr')
-
-courseNumbers = []
-
-csList = []
-for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
-    tags = [tag.text for tag in csTrs[i].findAll()]
-    ## course listing number
-    if len(tags) > 14:
-        course = str(tags[-2]).strip()
-        days = str(tags[-5])
-        days = days.replace('-', '')
-        days = days.strip()
-        days = ' '.join(days)
-        csList.append( {
-            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
-            'number': str(tags[0]),
-            'days': days,
-            'startTime': str(tags[-4]),
-            'endTime': str(tags[-3]),
-            'prof': str(tags[2]),
-            'dept': 'CS',
-            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
-            } )
-        
-        
-        if 'A R R' in csList[-1].values():
-            ## fix 'ARR' fields
-            csList[-1]['days'] = 'TBA'
-            csList[-1]['startTime'] = ''
-            csList[-1]['endTime'] = ''
-            csList[-1]['timeSlot'] = ''
+psychSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=PSYC&yr=2013&sess=SP'))
+psychTrs = psychSoup.findAll('tr')
+psychList = []
 
 
 @app.route('/')

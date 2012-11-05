@@ -281,19 +281,110 @@ for i in range(5, len(govTrs) - 1):
             govList[-1]['startTime'] = ''
             govList[-1]['endTime'] = ''
 
+psychSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=PSYC&yr=2013&sess=SP'))
+psychTrs = psychSoup.findAll('tr')
+psychList = []
+for i in range(27, len(psychTrs) - 1):
+    tags = [tag.text for tag in psychTrs[i].findAll()]
+    if len(tags) > 16:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        psychList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Psychology',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
+        } )
+        
+        if 'A R R' in psychList[-1].values():
+            ## fix 'ARR' fields
+            psychList[-1]['days'] = 'TBA'
+            psychList[-1]['startTime'] = ''
+            psychList[-1]['endTime'] = ''
+
+
+philSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=PHIL&yr=2013&sess=SP'))
+philTrs = philSoup.findAll('tr')
+philList = []
+for i in range(11, len(philTrs) - 1):
+    tags = [tag.text for tag in philTrs[i].findAll()]
+    if len(tags) > 12:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        philList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Philosophy',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
+        } )
+        
+        if 'A R R' in philList[-1].values():
+            ## fix 'ARR' fields
+            philList[-1]['days'] = 'TBA'
+            philList[-1]['startTime'] = ''
+            philList[-1]['endTime'] = ''
+
+litSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=LIT%20&yr=2013&sess=SP'))
+litTrs = litSoup.findAll('tr')
+litList = []
+for i in range(12, len(litTrs) - 1):
+    tags = [tag.text for tag in litTrs[i].findAll()]
+    if len(tags) > 12:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        litList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Literature',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
+        } )
+        
+        if 'A R R' in litList[-1].values():
+            ## fix 'ARR' fields
+            litList[-1]['days'] = 'TBA'
+            litList[-1]['startTime'] = ''
+            litList[-1]['endTime'] = ''
+
 ## Concatenate lists together ##
 
-masterList = csList + bioList + chemList + mathList + danceList + econList + engList + govList
+masterList = csList + bioList + chemList + mathList + danceList + econList + \
+             engList + govList + psychList + philList + litList
 
 
 @app.route('/')
 def show_all():
     return render_template('index.html', masterList=masterList)
 
+#"""
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+#"""
 
 """
 if __name__ == '__main__':
