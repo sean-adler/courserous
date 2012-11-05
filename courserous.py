@@ -56,6 +56,7 @@ for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
         days = ' '.join(days)
         csList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -88,6 +89,7 @@ for i in range(48, len(mathTrs) - 1):
         days = ' '.join(days)
         mathList.append( {
             'course': [course], #[course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -117,6 +119,7 @@ for i in range(23, len(danceTrs) - 1):
         days = ' '.join(days)
         danceList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -145,6 +148,7 @@ for i in range(20, len(econTrs) - 1):
         days = ' '.join(days)
         econList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -173,6 +177,7 @@ for i in range(96, len(bioTrs) - 1):
         days = ' '.join(days)
         bioList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -201,6 +206,7 @@ for i in range(55, len(chemTrs) - 1):
         days = ' '.join(days)
         chemList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -229,6 +235,7 @@ for i in range(63, len(engTrs) - 1):
         days = ' '.join(days)
         engList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -244,9 +251,39 @@ for i in range(63, len(engTrs) - 1):
             engList[-1]['startTime'] = ''
             engList[-1]['endTime'] = ''
 
+
+govSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/Portlets/CRM/CXWebLinks/Portlet.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-9033-e5630cfbf34a}&MY_SCP_NAME=/cgi-bin/course/pccrscatarea.cgi&DestURL=http://cx-cmc.cx.claremont.edu:51081/cgi-bin/course/pccrslistarea.cgi?crsarea=GOVT&yr=2013&sess=SP'))
+govTrs = govSoup.findAll('tr')
+govList = []
+for i in range(5, len(govTrs) - 1):
+    tags = [tag.text for tag in govTrs[i].findAll()]
+    if len(tags) > 16:
+        course = str(tags[-2]).strip()
+        days = str(tags[-5])
+        days = days.replace('-', '')
+        days = days.strip()
+        days = ' '.join(days)
+        govList.append( {
+            'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
+            'days': days,
+            'startTime': str(tags[-4]),
+            'endTime': str(tags[-3]),
+            'prof': str(tags[2]),
+            'dept': 'Government',
+            'timeSlot': 'Morning' if timeIsBeforeNoon(str(tags[-4])) else 'Afternoon'
+
+        } )
+        
+        if 'A R R' in govList[-1].values():
+            ## fix 'ARR' fields
+            govList[-1]['days'] = 'TBA'
+            govList[-1]['startTime'] = ''
+            govList[-1]['endTime'] = ''
+
 ## Concatenate lists together ##
 
-masterList = csList + bioList + chemList + mathList + danceList + econList + engList
+masterList = csList + bioList + chemList + mathList + danceList + econList + engList + govList
 
 
 @app.route('/')
@@ -257,6 +294,12 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
+"""
+if __name__ == '__main__':
+    app.run(port=3000)
+"""
+
     
 """
 

@@ -39,9 +39,12 @@ csSoup = BeautifulSoup(urllib2.urlopen('https://portal.claremontmckenna.edu/ics/
 ### Construct the list of classes
 csTrs = csSoup.findAll('tr')
 
+courseNumbers = []
+
 csList = []
 for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
     tags = [tag.text for tag in csTrs[i].findAll()]
+    ## course listing number
     if len(tags) > 14:
         course = str(tags[-2]).strip()
         days = str(tags[-5])
@@ -50,6 +53,7 @@ for i in range(35, len(csTrs) - 1):  ## courses start at 5th element of trs
         days = ' '.join(days)
         csList.append( {
             'course': [course[:course.find('  ')]],  ## strip the 'Textbook Info' bullshit
+            'number': str(tags[0]),
             'days': days,
             'startTime': str(tags[-4]),
             'endTime': str(tags[-3]),
@@ -73,5 +77,4 @@ def show_all():
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(port=3000)
