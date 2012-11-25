@@ -73,7 +73,7 @@
 		<div id="container">
 
 			{% for course in masterList %}
-				<div class="showBlock item {{course.days}} {{course.dept}} {{ course.timeSlot }}">
+				<div class="hideBlock item {{course.days}} {{course.dept}} {{ course.timeSlot }}">
 				<span id="bold"> {{course.course[0]}} </span>
 				</br> {{ course.number }}
 				</br> </br> {{course.startTime }}
