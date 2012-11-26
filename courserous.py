@@ -20,7 +20,7 @@ let.CXFacultyAdvisor/CXFacultyAdvisorPage.aspx?SessionID={25715df1-32b9-42bf-90\
 
 class Department():
 
-    def __init__(self, name, deptCode, firstTrTag, minTagLength, math=False):
+    def __init__(self, name, deptCode, firstTrTag, minTagLength):
         """Stores course data by having BeautifulSoup parse tags at the URL,
             then adds all tags containing course data to a list.
             The 'math' argument is a bit of a hack; for some reason, the Math
@@ -42,7 +42,7 @@ class Department():
                     ## The weird Math inconsistency mentioned above:    ##
                     ## Remove any lingering 'Textbook Info' in the tag. ##
                     ## We don't have to do this for the Math page.      ##
-                    'course': [course] if math else [course[:course.find('  ')]],
+                    'course': [course[:course.find('  ')]],
                     'number': str(tags[0]),
                     'days': days,
                     'startTime': str(tags[-4]),
@@ -108,8 +108,7 @@ lit = Department('Literature',
 math = Department('Math',
                   'MATH',
                   48,
-                  14,
-                  math=True)
+                  14)
 
 psych = Department('Psychology',
                    'PSYC',
